@@ -39,7 +39,6 @@ CLARIFICATION_QUESTION_NAME = 'clarification_question'
 @login_required
 def framework_dashboard(framework_slug):
     framework = get_framework(data_api_client, framework_slug)
-
     if request.method == 'POST':
         register_interest_in_framework(data_api_client, framework_slug)
         supplier_users = data_api_client.find_users(supplier_id=current_user.supplier_id)
@@ -84,6 +83,14 @@ def framework_dashboard(framework_slug):
     countersigned_agreement_file = None
     if countersigned_framework_agreement_exists_in_bucket(framework_slug, current_app.config['DM_AGREEMENTS_BUCKET']):
         countersigned_agreement_file = COUNTERSIGNED_AGREEMENT_FILENAME
+
+    # if there's a
+
+    if framework['frameworkAgreementVersion']:
+        return render_template(
+            'frameworks/start_contract.html',
+            framework=framework
+        ), 200
 
     return render_template(
         "frameworks/dashboard.html",
