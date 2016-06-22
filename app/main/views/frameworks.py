@@ -93,8 +93,10 @@ def framework_dashboard(framework_slug):
         return render_template(
             'frameworks/start_contract.html',
             framework=framework,
-            lots=framework['lots'],
-            lots_with_completed_drafts=lots_with_completed_drafts,
+            lots=[{
+                'name': lot['name'],
+                'has_completed_draft': (lot in lots_with_completed_drafts)
+            } for lot in framework['lots']],
         ), 200
 
     return render_template(

@@ -1,4 +1,5 @@
 {% extends "_base_page.html" %}
+{% import "toolkit/summary-table.html" as summary %}
 
 {% block page_title %}Apply to {{ framework.name }} – Digital Marketplace{% endblock %}
 
@@ -50,7 +51,7 @@
         {% for lot in lots %}
           <a href="#">{{ lot.name }}</a> =>
         <span>
-          {{ 'Pass' if lot in lots_with_completed_drafts else 'No application' }}
+          {{ 'Pass' if lot.has_completed_draft else 'No application' }}
         </span> <br>
         {% endfor %}
             <br>
