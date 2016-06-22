@@ -84,17 +84,22 @@ def framework_dashboard(framework_slug):
     if countersigned_framework_agreement_exists_in_bucket(framework_slug, current_app.config['DM_AGREEMENTS_BUCKET']):
         countersigned_agreement_file = COUNTERSIGNED_AGREEMENT_FILENAME
 
-    # if there's a
+    application_made = supplier_is_on_framework or (len(complete_drafts) > 0 and declaration_status == 'complete')
+    lots_with_completed_drafts = [lot for lot in framework['lots'] if count_drafts_by_lot(complete_drafts, lot['slug'])]
 
-    if framework['frameworkAgreementVersion']:
+    # if there's a
+    # as of now, this page only makes sense for suppliers accepted on to the framework
+    if application_made and framework['frameworkAgreementVersion']:
         return render_template(
             'frameworks/start_contract.html',
-            framework=framework
+            framework=framework,
+            lots=framework['lots'],
+            lots_with_completed_drafts=lots_with_completed_drafts,
         ), 200
 
     return render_template(
         "frameworks/dashboard.html",
-        application_made=supplier_is_on_framework or (len(complete_drafts) > 0 and declaration_status == 'complete'),
+        application_made=application_made,
         completed_lots=[{
             'name': lot['name'],
             'complete_count': count_drafts_by_lot(complete_drafts, lot['slug']),
@@ -102,7 +107,7 @@ def framework_dashboard(framework_slug):
             'unit': 'lab' if framework['slug'] == 'digital-outcomes-and-specialists' else 'service',
             'unit_plural': 'labs' if framework['slug'] == 'digital-outcomes-and-specialists' else 'service'
             # TODO: ^ make this dynamic, eg, lab, service, unit
-        } for lot in framework['lots'] if count_drafts_by_lot(complete_drafts, lot['slug'])],
+        } for lot in lots_with_completed_drafts],
         counts={
             "draft": len(drafts),
             "complete": len(complete_drafts)

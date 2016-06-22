@@ -43,16 +43,16 @@
       {% endwith %}
 
         <div class="summary-item-lede">
-          Your application was successful. You must return a signed framework agreement signature page before you can sell services on the Digital Marketplace.
+          <p>Your application was successful. You must return a signed framework agreement signature page before you can sell services on the Digital Marketplace.<p/>
         </div>
 
-      <h2>[Company name]</h2>
-        Summary table with name field as link
-        Digital outcomes	Pass
-        Digital specialists	Pass
-        User research participants	No application
-        User research studios	No application
-
+      <h2>{{ current_user.supplier_name }}</h2>
+        {% for lot in lots %}
+          <a href="#">{{ lot.name }}</a> =>
+        <span>
+          {{ 'Pass' if lot in lots_with_completed_drafts else 'No application' }}
+        </span> <br>
+        {% endfor %}
             <br>
       <br>
 
