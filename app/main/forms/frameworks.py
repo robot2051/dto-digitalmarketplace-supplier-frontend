@@ -12,4 +12,3 @@ class SignerDetailsForm(Form):
         DataRequired(message="You must provide the role of the person signing on behalf of the company."),
         Length(max=255, message="You must provide a role under 256 characters.")
     ])
-
