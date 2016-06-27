@@ -631,3 +631,22 @@ def submit_signer_details(framework_slug):
             form=form,
             framework=framework
         ), 400
+
+
+@main.route('/frameworks/<framework_slug>/signature-upload', methods=['GET'])
+def signature_upload(framework_slug):
+    framework = get_framework(data_api_client, framework_slug)
+
+    # form = SignerDetailsForm()
+
+    # if form.full_name.name in session:
+    #     form.full_name.data = session[form.full_name.name]
+
+    # if form.role.name in session:
+    #     form.role.data = session[form.role.name]
+
+    return render_template(
+        "frameworks/signature_upload.html",
+        # form=form,
+        framework=framework,
+    ), 200
