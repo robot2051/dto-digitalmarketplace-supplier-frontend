@@ -1739,18 +1739,18 @@ class TestReturnSignedAgreement(BaseApplicationTest):
         page = res.get_data(as_text=True)
         assert "You must provide the role of the person signing on behalf of the company" in page
 
-        def test_should_be_an_error_if_signer_details_fields_more_than_255_characters(self, data_api_client):
-            data_api_client.get_framework.return_value = get_g_cloud_8()
+    def test_should_be_an_error_if_signer_details_fields_more_than_255_characters(self, data_api_client):
+        data_api_client.get_framework.return_value = get_g_cloud_8()
 
-            # 255 characters should be fine
-            res = self.client.post(
-                "/suppliers/frameworks/g-cloud-8/signer-details",
-                data={
-                    'full_name': "J" * 255,
-                    'role': "J" * 255
-                }
-            )
-            assert res.status_code == 302
+        # 255 characters should be fine
+        res = self.client.post(
+            "/suppliers/frameworks/g-cloud-8/signer-details",
+            data={
+                'full_name': "J" * 255,
+                'role': "J" * 255
+            }
+        )
+        assert res.status_code == 302
 
         # 256 characters should be an error
         res = self.client.post(
