@@ -13,6 +13,10 @@
       {
         "link": url_for(".dashboard"),
         "label": "Your account",
+      },
+      {
+        "link": url_for(".framework_dashboard", framework_slug=framework.slug),
+        "label": "Your " + framework.name + " application"
       }
     ]
   %}
