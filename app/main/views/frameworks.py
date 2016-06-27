@@ -89,7 +89,7 @@ def framework_dashboard(framework_slug):
 
     # if there's a
     # as of now, this page only makes sense for suppliers accepted on to the framework
-    if application_made and framework['frameworkAgreementVersion']:
+    if application_made and framework.get('frameworkAgreementVersion'):
         return render_template(
             'frameworks/start_contract.html',
             framework=framework,
