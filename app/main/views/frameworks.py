@@ -87,18 +87,6 @@ def framework_dashboard(framework_slug):
     application_made = supplier_is_on_framework or (len(complete_drafts) > 0 and declaration_status == 'complete')
     lots_with_completed_drafts = [lot for lot in framework['lots'] if count_drafts_by_lot(complete_drafts, lot['slug'])]
 
-    # if there's a
-    # as of now, this page only makes sense for suppliers accepted on to the framework
-    if application_made and framework.get('frameworkAgreementVersion'):
-        return render_template(
-            'frameworks/start_contract.html',
-            framework=framework,
-            lots=[{
-                'name': lot['name'],
-                'has_completed_draft': (lot in lots_with_completed_drafts)
-            } for lot in framework['lots']],
-        ), 200
-
     return render_template(
         "frameworks/dashboard.html",
         application_made=application_made,
@@ -494,6 +482,23 @@ def framework_agreement(framework_slug):
         supplier_framework['agreementReturnedAt'] = datetimeformat(
             date_parse(supplier_framework['agreementReturnedAt'])
         )
+
+    # if there's a frameworkAgreementVersion key, it means we're on G-Cloud 8 or higher
+    if framework.get('frameworkAgreementVersion'):
+
+        drafts, complete_drafts = get_drafts(data_api_client, framework_slug)
+        lots_with_completed_drafts = [
+            lot for lot in framework['lots'] if count_drafts_by_lot(complete_drafts, lot['slug'])
+        ]
+
+        return render_template(
+            'frameworks/start_contract.html',
+            framework=framework,
+            lots=[{
+                'name': lot['name'],
+                'has_completed_draft': (lot in lots_with_completed_drafts)
+            } for lot in framework['lots']],
+        ), 200
 
     return render_template(
         "frameworks/agreement.html",
