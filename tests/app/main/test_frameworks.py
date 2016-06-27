@@ -25,6 +25,15 @@ def _return_fake_s3_file_dict(directory, filename, ext, last_modified=None, size
     }
 
 
+def get_g_cloud_8():
+    return BaseApplicationTest.framework(
+        status='standstill',
+        name='G-Cloud 8',
+        slug='g-cloud-8',
+        framework_agreement_version='v1.0'
+    )
+
+
 @mock.patch('dmutils.s3.S3')
 @mock.patch('app.main.views.frameworks.data_api_client', autospec=True)
 class TestFrameworksDashboard(BaseApplicationTest):
@@ -616,12 +625,7 @@ class TestFrameworkAgreement(BaseApplicationTest):
         with self.app.test_client():
             self.login()
 
-            data_api_client.get_framework.return_value = self.framework(
-                status='standstill',
-                name='G-Cloud 8',
-                slug='g-cloud-8',
-                framework_agreement_version='v1.0'
-            )
+            data_api_client.get_framework.return_value = get_g_cloud_8()
             data_api_client.get_supplier_framework_info.return_value = self.supplier_framework(
                 on_framework=True)
 
@@ -636,12 +640,7 @@ class TestFrameworkAgreement(BaseApplicationTest):
         with self.app.test_client():
             self.login()
 
-            data_api_client.get_framework.return_value = self.framework(
-                status='standstill',
-                name='G-Cloud 8',
-                slug='g-cloud-8',
-                framework_agreement_version='v1.0'
-            )
+            data_api_client.get_framework.return_value = get_g_cloud_8()
             data_api_client.get_supplier_framework_info.return_value = self.supplier_framework(
                 on_framework=True)
             data_api_client.find_draft_services.return_value = {
