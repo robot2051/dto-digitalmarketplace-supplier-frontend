@@ -611,8 +611,7 @@ def submit_signer_details(framework_slug):
         session[form.full_name.name] = form.full_name.data
         session[form.role.name] = form.role.data
 
-        # return redirect(url_for(".upload_signature_page"))
-        return redirect(url_for(".signer_details", framework_slug=framework['slug']))
+        return redirect(url_for(".signature_upload", framework_slug=framework_slug))
     else:
         current_app.logger.warning(
             "signaturepage.fail: full_name:{full_name} role:{role} {errors}",
@@ -620,10 +619,19 @@ def submit_signer_details(framework_slug):
                 'full_name': session.get('full_name'),
                 'role': session.get('role'),
                 'errors': ",".join(chain.from_iterable(form.errors.values()))})
+
+        form_errors = []
+        if form.errors:
+            error_keys_in_order = [key for key in ['full_name', 'role'] if key in form.errors.keys()]
+            form_errors = [
+                {'question': form[key].label.text, 'input_name': key} for key in error_keys_in_order
+            ]
+
         return render_template(
             "frameworks/signer_details.html",
             form=form,
-            framework=framework
+            form_errors=form_errors,
+            framework=framework,
         ), 400
 
 

@@ -34,27 +34,33 @@
       {% include "toolkit/page-heading.html" %}
     {% endwith %}
 
+    {% if form.errors %}
+      {%
+        with
+          errors = form_errors
+      %}
+        {% include 'toolkit/forms/validation.html' %}
+      {% endwith %}
+    {% endif %}
+
     <form method="POST" action="{{ url_for('.signer_details', framework_slug=framework.slug) }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        {%
-          with
-            question = "Full name",
-            name = "full_name",
-            value = form.full_name.data,
-            error = form.full_name.errors[0]
-        %}
-          {% include "toolkit/forms/textbox.html" %}
-        {% endwith %}
-        {%
-          with
-            question = "Role at the company",
-            name = "role",
-            value = form.role.data,
-            error = form.role.errors[0],
-            hint = 'The person signing must have the authority to agree to the framework terms, eg director or company secretary.'
-        %}
-          {% include "toolkit/forms/textbox.html" %}
-        {% endwith %}
+        {% set question_names = ['full_name', 'role' ]%}
+        {% for question_name in question_names %}
+          {%
+            with
+              question = form[question_name].label,
+              name = question_name,
+              value = form[question_name].data,
+              hint = form[question_name].description,
+              error = form[question_name].errors[0]
+          %}
+            {% include "toolkit/forms/textbox.html" %}
+          {% endwith %}
+
+        {% endfor %}
+
+
         {%
           with
             type = "save",
