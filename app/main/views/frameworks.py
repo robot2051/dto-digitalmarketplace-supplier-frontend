@@ -512,7 +512,7 @@ def upload_framework_agreement(framework_slug):
 
     upload_error = None
     if not file_is_less_than_5mb(request.files['agreement']):
-        upload_error = "Document must be less than 5Mb"
+        upload_error = "Document must be less than 5MB"
     elif file_is_empty(request.files['agreement']):
         upload_error = "Document must not be empty"
 
@@ -659,7 +659,7 @@ def submit_signature_upload(framework_slug):
     if not file_is_image(request.files['signature_page']) and not file_is_pdf(request.files['signature_page']):
         upload_error = "The file must be a PDF, JPG or PNG"
     elif not file_is_less_than_5mb(request.files['signature_page']):
-        upload_error = "The file must be less than 5Mb"
+        upload_error = "The file must be less than 5MB"
     elif file_is_empty(request.files['signature_page']):
         upload_error = "The file must not be empty"
 
