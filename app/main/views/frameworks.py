@@ -15,7 +15,7 @@ from dmutils import s3
 from dmutils.documents import (
     RESULT_LETTER_FILENAME, AGREEMENT_FILENAME, SIGNED_AGREEMENT_PREFIX, COUNTERSIGNED_AGREEMENT_FILENAME,
     get_agreement_document_path, get_signed_url, get_extension, file_is_less_than_5mb, file_is_empty, file_is_image,
-    sanitise_supplier_name,
+    file_is_pdf, sanitise_supplier_name
 )
 
 from ... import data_api_client
@@ -640,6 +640,35 @@ def submit_signer_details(framework_slug):
 def signature_upload(framework_slug):
     framework = get_framework(data_api_client, framework_slug)
     return_supplier_framework_info_if_on_framework_or_abort(data_api_client, framework_slug)
+
+    # TODO get a filename or something
+
+    return render_template(
+        "frameworks/signature_upload.html",
+        framework=framework,
+    ), 200
+
+
+@main.route('/frameworks/<framework_slug>/signature-upload', methods=['POST'])
+@login_required
+def submit_signature_upload(framework_slug):
+    framework = get_framework(data_api_client, framework_slug, allowed_statuses=['standstill', 'live'])
+    return_supplier_framework_info_if_on_framework_or_abort(data_api_client, framework_slug)
+
+    upload_error = None
+    if not file_is_image(request.files['signature_page']) and not file_is_pdf(request.files['signature_page']):
+        upload_error = "The file must be a PDF, JPG or PNG"
+    elif not file_is_less_than_5mb(request.files['signature_page']):
+        upload_error = "The file must be less than 5Mb"
+    elif file_is_empty(request.files['signature_page']):
+        upload_error = "The file must not be empty"
+
+    if upload_error is not None:
+        return render_template(
+            "frameworks/signature_upload.html",
+            framework=framework,
+            upload_error=upload_error
+        ), 400
 
     return render_template(
         "frameworks/signature_upload.html",
