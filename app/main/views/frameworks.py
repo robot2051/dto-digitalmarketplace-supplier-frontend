@@ -579,6 +579,7 @@ def upload_framework_agreement(framework_slug):
 
 
 @main.route('/frameworks/<framework_slug>/signer-details', methods=['GET'])
+@login_required
 def signer_details(framework_slug):
     framework = get_framework(data_api_client, framework_slug)
     return_supplier_framework_info_if_on_framework_or_abort(data_api_client, framework_slug)
@@ -599,6 +600,7 @@ def signer_details(framework_slug):
 
 
 @main.route('/frameworks/<framework_slug>/signer-details', methods=['POST'])
+@login_required
 def submit_signer_details(framework_slug):
     framework = get_framework(data_api_client, framework_slug)
     return_supplier_framework_info_if_on_framework_or_abort(data_api_client, framework_slug)
@@ -626,6 +628,7 @@ def submit_signer_details(framework_slug):
 
 
 @main.route('/frameworks/<framework_slug>/signature-upload', methods=['GET'])
+@login_required
 def signature_upload(framework_slug):
     framework = get_framework(data_api_client, framework_slug)
     return_supplier_framework_info_if_on_framework_or_abort(data_api_client, framework_slug)
