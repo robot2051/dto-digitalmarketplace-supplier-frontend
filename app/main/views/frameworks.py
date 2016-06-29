@@ -690,4 +690,18 @@ def submit_signature_upload(framework_slug):
         )
     )
 
-    return redirect(url_for(".signature_upload", framework_slug=framework_slug))
+    session['signature_page'] = request.files['signature_page'].filename
+
+    return redirect(url_for(".contract_review", framework_slug=framework_slug))
+
+@main.route('/frameworks/<framework_slug>/contract-review', methods=['GET'])
+@login_required
+def contract_review(framework_slug):
+    framework = get_framework(data_api_client, framework_slug)
+    supplier_framework = return_supplier_framework_info_if_on_framework_or_abort(data_api_client, framework_slug)
+
+    return render_template(
+        "frameworks/contract_review.html",
+        framework=framework,
+        declaration=supplier_framework['declaration']
+    ), 200
