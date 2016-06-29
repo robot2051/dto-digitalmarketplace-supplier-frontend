@@ -24,6 +24,7 @@
 {% endblock %}
 
 {% block main_content %}
+
 <div class="grid-row">
   <div class="column-two-thirds">
     {%
@@ -35,6 +36,15 @@
     {% endwith %}
   </div>
 </div>
+
+{% if form.errors %}
+  {%
+    with
+      errors = form_errors
+  %}
+    {% include 'toolkit/forms/validation.html' %}
+  {% endwith %}
+{% endif %}
 
 <div>
   {% import "toolkit/summary-table.html" as summary %}
@@ -62,21 +72,21 @@
   {% endcall %}
 </div>
 
-
+<div class="single-question-page">
 <div class="grid-row">
   <div class="column-two-thirds">
+
     <form method="POST" action="{{ url_for('.submit_contract_review', framework_slug=framework.slug) }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-
         {%
           with
           type = "checkbox",
           name = "authority",
-          options = [
-            {
-              "label": "I have the authority to return this agreement on behalf of {}".format(current_user.supplier_name),
-            }
-        ]
+          question = form.authority.label,
+          options = [{
+              "label": form.authority.description,
+          }],
+          error=form.authority.errors[0]
         %}
           {% include "toolkit/forms/selection-buttons.html" %}
         {% endwith %}
@@ -96,6 +106,7 @@
       <p>You’ll also receive an email to confirm that the signature page has been returned.</p>
     </div>
   </div>
+</div>
 </div>
 
 {% endblock %}

@@ -1907,4 +1907,4 @@ class TestReturnSignedAgreement(BaseApplicationTest):
                 download_filename='Supplier_Name-1234-signed-framework-agreement.jpg'
             )
             assert res.status_code == 302
-            assert res.location == 'http://localhost/suppliers/frameworks/g-cloud-7/agreement'
+            assert res.location == 'http://localhost/suppliers/frameworks/g-cloud-8/contract-review'

@@ -22,12 +22,7 @@ class SignerDetailsForm(Form):
 
 class ContractReviewForm(Form):
 
-    def __init__(self, supplier_name, **kwargs):
-        super(Form, self).__init__(**kwargs)
-        self.supplier_name = supplier_name
-
     authority = BooleanField(
         'Authorisation',
-        validators=[DataRequired(message="You must agree to provide authorisation, please k thanks.")],
-        description="I have the authority to return this agreement on behalf of {}".format(self.supplier_name)
+        validators=[DataRequired(message="You must confirm your authority before submitting a signed contract.")]
     )
