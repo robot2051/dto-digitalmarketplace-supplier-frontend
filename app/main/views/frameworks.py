@@ -488,7 +488,7 @@ def framework_agreement(framework_slug):
         ]
 
         return render_template(
-            'frameworks/start_contract.html',
+            'frameworks/contract_start.html',
             framework=framework,
             lots=[{
                 'name': lot['name'],
