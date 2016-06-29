@@ -24,5 +24,5 @@ class ContractReviewForm(Form):
 
     authority = BooleanField(
         'Authorisation',
-        validators=[DataRequired(message="You must confirm your authority before submitting a signed contract.")]
+        validators=[DataRequired(message="You must confirm you have the authority to return the agreement.")]
     )
